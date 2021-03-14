@@ -2,7 +2,11 @@
   <div class="container">
     <h2>Visualization</h2>
     <div class="center">
-      <Chart v-bind:chartData="chartData" v-bind:options="options" />
+      <Chart
+        :chartData="chartData"
+        :options="options"
+        :height="500"
+      />
     </div>
   </div>
 </template>
@@ -11,7 +15,6 @@
 import Chart from "./Chart.vue";
 import employee_data from "../data/data.json";
 
-
 export default {
   name: "Container",
   data: () => ({
@@ -19,12 +22,24 @@ export default {
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      title: "Visualization of Company Management",
+      legend: {
+        display: false,
+      },
+      layout: {
+        padding: {
+          top: 50,
+        },
+      },
       scales: {
         yAxes: [
           {
             scaleLabel: {
               display: true,
               labelString: "Response Rate",
+            },
+            ticks: {
+              suggestedMin: 0,
             },
           },
         ],
@@ -34,6 +49,9 @@ export default {
               display: true,
               labelString: "Index",
             },
+            // ticks: {
+            //   suggestedMin: 0,
+            // },
           },
         ],
       },
@@ -49,13 +67,13 @@ export default {
           label: function (tooltipItem, data) {
             let item =
               data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-            let change = (item.change > 0) ? ("+" + item.change) : item.change;
+            let change = item.change > 0 ? "+" + item.change : item.change;
             return "Index: " + item.x + " ( " + change + " )";
           },
           afterLabel: function (tooltipItem, data) {
             let item =
               data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-            return "ResponseRate: " + item.y;
+            return ["ResponseRate: " + item.y, "Employees: " + item.employees];
           },
         },
       },
@@ -71,7 +89,5 @@ export default {
 .center {
   margin: auto;
   max-width: 60%;
-  max-height: 80%;
-  min-height: 80%;
 }
 </style>
